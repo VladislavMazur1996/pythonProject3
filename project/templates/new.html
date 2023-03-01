@@ -7,6 +7,10 @@
 <hr>
 <h>{{ post.text|censor }}</h>
 <hr>
+<form method="get" href="subscriber">
+<button>Подписаться на категории!</button>
+</form>
+<br>
 <td>{{ post.creating_dt }}</td>
 <td>{{ post.author.user }}</td>
 {% endblock content %}

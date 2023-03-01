@@ -1,9 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .forms import PostForm
-from .models import Post
+from .models import Post, Category
 from .filters import PostFilter
 
 
@@ -62,3 +64,13 @@ class PostDelete(PermissionRequiredMixin, DeleteView):
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('news')
+
+
+@login_required
+def subscriber(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscriber.add(user)
+
+    message = 'Вы успешно подписались на рассылку новостей категории'
+    return render(request, '/subscriber.html', {'category': category, 'message': message})
